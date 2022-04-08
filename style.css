@@ -52,16 +52,10 @@ main {
   width: 450px;
   padding: 4em;
   display: flex;
-  gap: 3em;
+  gap: 2em;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-@media screen and (max-width: 450px) {
-  main {
-    width: 100%;
-  }
 }
 
 h1 {
@@ -69,13 +63,14 @@ h1 {
   font-size: 2.5rem;
   color: var(--fc-black);
   text-align: center;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: .5rem;
+  margin-bottom: 1rem;
 }
 
 .player-input {
@@ -105,13 +100,29 @@ input {
 .board {
   background-color: var(--fc-black);
   width: calc(300px + 8px);
+  height: calc(300px + 8px);
   /* margin: 4rem auto; */
   /* border: 5px solid olive; */
   display: grid;
   justify-content: center;
   gap: 4px;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+@media screen and (max-width: 450px) {
+  main {
+    width: 100%;
+  }
+
+  h1,
+  form {
+    width: 308px;
+  }
+
+  label {
+    font-size: 1.2rem;
+  }
 }
 
 .square {
