@@ -37,37 +37,92 @@ ol, ul {
 
 /* Reset ends here */
 
-.main {
+:root {
+  --bg-color: floralwhite;
+  --fc-black: #444;
+}
+
+body {
+  background-color: var(--bg-color);
+  /* color: var(--fc-black); */
+}
+
+main {
+  margin: auto;
+  width: 450px;
+  padding: 4em;
   display: flex;
+  gap: 3em;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 2.5rem;
+  color: var(--fc-black);
+  text-align: center;
+  line-height: 1.2;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.player-input {
+  display: flex;
+  gap: .4rem;
+  align-items: flex-end;
+  /* align-items: center; */
+}
+
+label {
+  color: var(--fc-black);
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+input {
+  width: 10ch;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  padding: .5rem;
+  background-color: var(--bg-color);
+  border: none;
+  border-bottom: 3px solid var(--fc-black);
 }
 
 .board {
-  background-color: #000;
-  width: calc(300px + 1rem);
-  margin: auto;
+  background-color: var(--fc-black);
+  width: calc(300px + 8px);
+  /* margin: 4rem auto; */
   /* border: 5px solid olive; */
   display: grid;
   justify-content: center;
-  gap: .5rem;
+  gap: 4px;
   grid-template-columns: repeat(3, 100px);
   grid-template-rows: repeat(3, 100px);
 }
 
 .square {
-  background-color: #FFF;
+  background-color: var(--bg-color);
+  color: var(--fc-black);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Georgia;
-  font-size: 2rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 2.5rem;
+  text-transform: lowercase;
 }
 
-.square:hover {
-  background-color: lightgray;
-}
-
-.square:active {
+/* .square:hover {
   background-color: aliceblue;
-}
+} */
+
+/* .square:active {
+  background-color: aliceblue;
+} */

@@ -1,10 +1,12 @@
-// Need:
+// Complete:
 // - a player one
 //     - name + turnOrder = 1
 // - a player two (or computer)
 //     - name + turnOrder = 2
 // - a board object
 // - a way to display the board object
+
+// Need:
 // - a way to make changes to the board object (i.e., make a legal move)
 // - a way to check for win conditions
 //     - might need a winConditions object to refer to
@@ -15,8 +17,8 @@ const Game = (() => {
   const board = ['', '', '', '', '', '', '', '', ''];
   const playerList = [];
   const playerOneSymbol = 'X';
-  const playerTwoSymbol = 'Y';
-  const turn = 0;
+  const playerTwoSymbol = 'O';
+  let turn = 0;
 
   const Player = (name, order, symbol) => {
     return { name, order, symbol };
@@ -39,9 +41,18 @@ const Game = (() => {
 
   const getBoard = () => board;
 
-  const updateBoard = (turn, index) => {
-    if (playerList === 2) {
-      board[index] = playerList[turn].symbol;
+  const updateBoard = (e) => {
+    if (playerList.length === 2) {
+      let squares = document.querySelectorAll('.square');
+      if (!squares[Array.from(squares).indexOf(e.target)].textContent) {
+        squares[Array.from(squares).indexOf(e.target)].textContent = playerList[turn].symbol;
+        board[Array.from(squares).indexOf(e.target)] = playerList[turn].symbol;
+        console.log(squares);
+        turn++;
+        if (turn > 1) {
+          turn = 0;
+        }
+      }
     }
   }
 
@@ -51,15 +62,26 @@ const Game = (() => {
       newSquare.classList.add('square');
       boardContainer.appendChild(newSquare);
     });
+    // console.log(boardContainer);
+    let squares = Array.from(document.querySelectorAll('.square'));
+    squares.forEach(child => {
+      child.addEventListener('click', updateBoard);
+    });
   })();
 
+  const endGame = () => {
+    let squares = Array.from(document.querySelectorAll('.square'));
+    squares.forEach(child => {
+      child.removeEventListener('click', updateBoard);
+    })
+  }
+
   return {
-    // makeMove,
-    // turn,
     setPlayer,
     getPlayers,
     getBoard,
-    // populateBoard
+    endGame
   };
+
 })();
 
