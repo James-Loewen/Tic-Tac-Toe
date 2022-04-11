@@ -97,6 +97,20 @@ input {
   border-bottom: 3px solid var(--fc-black);
 }
 
+#start-btn {
+  margin-top: 1rem;
+  width: 5em;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bg-color);
+  padding: .5rem;
+  background-color: var(--fc-black);
+  border: none;
+  border-radius: 8px;
+  align-self: center;
+}
+
 .board {
   background-color: var(--fc-black);
   width: calc(300px + 8px);
