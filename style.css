@@ -52,7 +52,7 @@ main {
   width: 450px;
   padding: 4em;
   display: flex;
-  gap: 2em;
+  gap: 1em;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -70,7 +70,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: .5rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 
 .player-input {
@@ -97,14 +97,15 @@ input {
   border-bottom: 3px solid var(--fc-black);
 }
 
-#start-btn {
+#start-btn,
+#restart-btn {
   margin-top: 1rem;
-  width: 5em;
+  /* width: 5em; */
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--bg-color);
-  padding: .5rem;
+  padding: .5rem .8rem;
   background-color: var(--fc-black);
   border: none;
   border-radius: 8px;
@@ -113,6 +114,7 @@ input {
 
 .board {
   background-color: var(--fc-black);
+  padding: .25rem;
   width: calc(300px + 8px);
   height: calc(300px + 8px);
   /* margin: 4rem auto; */
@@ -122,25 +124,16 @@ input {
   gap: 4px;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  border-radius: 1rem;
 }
 
-@media screen and (max-width: 450px) {
-  main {
-    width: 100%;
-  }
-
-  h1,
-  form {
-    width: 308px;
-  }
-
-  label {
-    font-size: 1.2rem;
-  }
+.pregame,
+.square {
+  background-color: var(--bg-color);
+  border-radius: .75rem;
 }
 
 .square {
-  background-color: var(--bg-color);
   color: var(--fc-black);
   display: flex;
   justify-content: center;
