@@ -94,7 +94,7 @@ const Game = (() => {
     } else if ([board[0], board[4], board[8]].every((symbol, index) => symbol === playerList[turn].symbol)) {
       indicies = [0, 4, 8];
     } else if ([board[2], board[4], board[6]].every((symbol, index) => symbol === playerList[turn].symbol)) {
-      indicies = 2, 4, 6;
+      indicies = [2, 4, 6];
     } else {
       indicies = false;
     }
@@ -164,6 +164,7 @@ const Game = (() => {
     gameOngoing = false;
     startBtn.setAttribute('hidden', true);
     restartBtn.removeAttribute('hidden');
+    restartBtn.style.visibility = 'visible';
     restartBtn.addEventListener('click', resetGame);
   }
 
@@ -176,7 +177,7 @@ const Game = (() => {
     turn = 0;
     resultsDisplay.innerHTML = '';
     resultsDisplay.setAttribute('hidden', true);
-    restartBtn.setAttribute('hidden', true);
+    restartBtn.style.visibility = 'hidden';
     populateBoard();
   }
 
