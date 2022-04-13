@@ -14,26 +14,37 @@
 const colorList = ['rgb(0, 155, 72)', 'rgb(255, 255, 255)', 'rgb(183, 18, 52)', 'rgb(255, 213, 0)', 'rgb(0, 70, 173)', 'rgb(255, 88, 0)']
 const randomColor = (e) => {
   if (!e.target.style.backgroundColor) {
-    return colorList[Math.floor(Math.random() * colorList.length)];
+    e.target.style.backgroundColor = colorList[Math.floor(Math.random() * colorList.length)];
   } else {
     let currBgColor = e.target.style.backgroundColor;
     let tempColorList = colorList.filter(color => color !== currBgColor);
-    return tempColorList[Math.floor(Math.random() * tempColorList.length)];
+    e.target.style.backgroundColor = tempColorList[Math.floor(Math.random() * tempColorList.length)];
+  }
+  if (e.target.style.backgroundColor === 'rgb(0, 70, 173)') {
+    e.target.style.color = 'rgb(255, 250, 240)';
+  } else {
+    e.target.style.color = '#444';
   }
 }
 const pregameSquares = document.querySelectorAll('.pregame');
 pregameSquares.forEach(btn => {
-  btn.addEventListener('mouseenter', (e) => {
-    e.target.style.backgroundColor = randomColor(e);
-  })
+  btn.addEventListener('mouseover', randomColor);
 })
-
 
 const boardContainer = document.querySelector('.board');
 const playerOneInput = document.querySelector('#player-one');
 const playerTwoInput = document.querySelector('#player-two');
 const startBtn = document.querySelector('#start-btn');
 const restartBtn = document.querySelector('#restart-btn');
+const resultsDisplay = document.querySelector('.game-results');
+
+const Player = (name, order, symbol) => {
+  return {
+    name,
+    order,
+    symbol
+  };
+}
 
 const Game = (() => {
   let board = ['', '', '', '', '', '', '', '', ''];
@@ -42,30 +53,11 @@ const Game = (() => {
   let playerTwoSymbol = 'o';
   let gameOngoing = false;
   let turn = 0;
-  let winner;
-
-  // const Player = (name, order, symbol) => {
-  //   return { name, order, symbol };
-  // }
-
-  class Player {
-    constructor(name, order, symbol) {
-      this.name = name;
-      this.order = order;
-      this.symbol = symbol;
-    }
-  }
 
   const setPlayer = name => {
-    playerList.push(new Player(playerOneInput.value, 1, playerOneSymbol));
-    playerList.push(new Player(playerTwoInput.value, 2, playerTwoSymbol));
+    playerList.push(Player(playerOneInput.value, 1, playerOneSymbol));
+    playerList.push(Player(playerTwoInput.value, 2, playerTwoSymbol));
   }
-
-  const getPlayers = () => {
-    return playerList;
-  }
-
-  const getBoard = () => board;
 
   const updateBoard = (e) => {
     let squares = document.querySelectorAll('.square');
@@ -73,7 +65,6 @@ const Game = (() => {
       squares[Array.from(squares).indexOf(e.target)].textContent = playerList[turn].symbol;
       board[Array.from(squares).indexOf(e.target)] = playerList[turn].symbol;
       if (checkForWin()) {
-        winner = playerList[turn].name;
         endGame();
       } else if (checkForTie()) {
         endGame();
@@ -87,19 +78,27 @@ const Game = (() => {
   }
 
   const checkForWin = () => {
-    let row1 = board.slice(0, 3).every((symbol, index) => symbol === playerList[turn].symbol);
-    let row2 = board.slice(3, 6).every((symbol, index) => symbol === playerList[turn].symbol);
-    let row3 = board.slice(6).every((symbol, index) => symbol === playerList[turn].symbol);
-    let col1 = [board[0], board[3], board[6]].every((symbol, index) => symbol === playerList[turn].symbol);
-    let col2 = [board[1], board[4], board[7]].every((symbol, index) => symbol === playerList[turn].symbol);
-    let col3 = [board[2], board[5], board[8]].every((symbol, index) => symbol === playerList[turn].symbol);
-    let diag1 = [board[0], board[4], board[8]].every((symbol, index) => symbol === playerList[turn].symbol);
-    let diag2 = [board[2], board[4], board[6]].every((symbol, index) => symbol === playerList[turn].symbol);
-    if (row1 || row2 || row3 || col1 || col2 || col3 || diag1 || diag2) {
-      return true;
+    let indicies;
+    if (board.slice(0, 3).every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [0, 1, 2];
+    } else if (board.slice(3, 6).every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [3, 4, 5];
+    } else if (board.slice(6).every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [6, 7, 8];
+    } else if ([board[0], board[3], board[6]].every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [0, 3, 6];
+    } else if ([board[1], board[4], board[7]].every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [1, 4, 7];
+    } else if ([board[2], board[5], board[8]].every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [2, 5, 8];
+    } else if ([board[0], board[4], board[8]].every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = [0, 4, 8];
+    } else if ([board[2], board[4], board[6]].every((symbol, index) => symbol === playerList[turn].symbol)) {
+      indicies = 2, 4, 6;
     } else {
-      return false;
+      indicies = false;
     }
+    return indicies
   }
 
   const checkForTie = () => {
@@ -120,18 +119,21 @@ const Game = (() => {
 
   const populateBoard = () => {
     if (!gameOngoing) {
-      boardContainer.innerHTML = '';
       setPlayer();
-      board.forEach(square => {
-        let newSquare = document.createElement('div');
-        newSquare.classList.add('square');
-        boardContainer.appendChild(newSquare);
-      });
+      Array.from(boardContainer.children).forEach(square => {
+        square.textContent = '';
+        square.classList.add('square');
+        square.removeEventListener('mouseover', randomColor);
+        square.style = "";
+      })
       let squares = Array.from(document.querySelectorAll('.square'));
       squares.forEach(child => {
         child.addEventListener('click', updateBoard);
       });
       gameOngoing = true;
+      startBtn.style.visibility = 'hidden';
+      playerOneInput.setAttribute('readonly', true);
+      playerTwoInput.setAttribute('readonly', true);
     }
   };
 
@@ -140,10 +142,24 @@ const Game = (() => {
     squares.forEach(child => {
       child.removeEventListener('click', updateBoard);
     })
-    if (winner) {
-      console.log(`${winner} won the game!!`);
+    if (checkForWin()) {
+      // console.log(playerList[turn].name, checkForWin());
+      Array.from(boardContainer.children).forEach((item, index) => {
+        if (checkForWin().includes(index)) {
+          item.style.backgroundColor = colorList[Math.floor(Math.random() * colorList.length)];
+          if (item.style.backgroundColor === 'rgb(0, 70, 173)') {
+            item.style.color = 'rgb(255, 250, 240)';
+          }
+          item.addEventListener('mouseover', randomColor);
+          console.log(item);
+        }
+      });
+      resultsDisplay.innerHTML = `The winner is <span id="winner">${playerList[turn].name}</span>!`;
+      resultsDisplay.removeAttribute('hidden');
     } else {
       console.log("It's a dang old tie!");
+      resultsDisplay.innerHTML = `It's a <span id="winner">tie</span>!`;
+      resultsDisplay.removeAttribute('hidden');
     }
     gameOngoing = false;
     startBtn.setAttribute('hidden', true);
@@ -158,28 +174,21 @@ const Game = (() => {
     playerTwoSymbol = 'o';
     gameOngoing = false;
     turn = 0;
-    winner;
-    console.log(board);
+    resultsDisplay.innerHTML = '';
+    resultsDisplay.setAttribute('hidden', true);
+    restartBtn.setAttribute('hidden', true);
     populateBoard();
-  }
-
-  const deletePlayers = () => {
-    playerOne
   }
 
   return {
     setPlayer,
-    getPlayers,
-    getBoard,
     endGame,
     populateBoard,
     board,
     checkForWin,
     checkForTie,
-    winner,
     resetGame,
     playerList,
-    deletePlayers
   };
 })();
 
